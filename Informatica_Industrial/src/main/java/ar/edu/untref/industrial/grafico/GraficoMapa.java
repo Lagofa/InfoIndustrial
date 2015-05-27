@@ -1,6 +1,7 @@
 package main.java.ar.edu.untref.industrial.grafico;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import main.java.ar.edu.untref.industrial.model.*;
+import main.java.ar.edu.untref.industrial.multimedia.Multimedia;
 
 public class GraficoMapa extends JComponent {
 
@@ -26,7 +28,8 @@ public class GraficoMapa extends JComponent {
 	private List<Satelite>satelites;
 	private List<RowFileGps> filasGps =new ArrayList<>();
 	private boolean trace= false;
-
+    
+    
 	/**
 	 * Recibe el punto del centro del grafico
 	 * 
@@ -69,7 +72,7 @@ public class GraficoMapa extends JComponent {
 				this.filasGps.add(fila);
 			} 
 			if (grabando) {
-//				 VideoImageHolder.getImages().add(bufferedImage);
+				Multimedia.captureScreen(new Point(0,0) , new Dimension(1200,600));
 			}
 		}
 	}
@@ -106,29 +109,29 @@ public class GraficoMapa extends JComponent {
 	private Image getIcon(Satelite satelite) {
 
 		Image imgSatelite;
-        String path=new String("src/test/resources/");
+       String path=new String("src/test/resources");
 		
         switch (satelite.getPrn()) {
 		case 11:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoGreen.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoGreen.gif");
 			break;
 		case 13:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoGray.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoGray.gif");
 			break;
 		case 20:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoBlue.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoBlue.gif");
 			break;
 		case 23:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoOrange.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoOrange.gif");
 			break;
 		case 24:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoRed.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoRed.gif");
 			break;
 		case 32:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoMagenta.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoMagenta.gif");
 			break;
 		default:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "iconoBlack.gif");
+			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoBlack.gif");
 			break;
 		}
 
@@ -201,5 +204,5 @@ public class GraficoMapa extends JComponent {
 
 		return color;
 	}
-
+	
 }

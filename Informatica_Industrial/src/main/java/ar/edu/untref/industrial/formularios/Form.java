@@ -9,9 +9,11 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +22,7 @@ import main.java.ar.edu.untref.industrial.grafico.AccionVideo;
 import main.java.ar.edu.untref.industrial.grafico.EstadoTimer;
 import main.java.ar.edu.untref.industrial.grafico.GraficoMapa;
 import main.java.ar.edu.untref.industrial.model.Timer;
+import main.java.ar.edu.untref.industrial.multimedia.Multimedia;
 import main.java.ar.edu.untref.industrial.parser.Parser;
 
 public class Form extends JFrame implements ActionListener {
@@ -101,7 +104,7 @@ public class Form extends JFrame implements ActionListener {
 		buttonDetenerGrab.setPreferredSize(new Dimension(160, 30));
 		buttonDetenerGrab.setFocusable(false);
 		buttonDetenerGrab.setBackground(Color.white);
-		buttonDetenerGrab.setActionCommand(AccionVideo.GRABAR.toString());
+		buttonDetenerGrab.setActionCommand(AccionVideo.DETENER_GRABACION.toString());
 		buttonDetenerGrab.addActionListener(this);
 		subPanel.add(buttonDetenerGrab, new GridBagConstraints());
 		
@@ -133,11 +136,17 @@ public class Form extends JFrame implements ActionListener {
 		} else if (name.equals(AccionVideo.PAUSA.toString())) {
 			this.timer.setEstado(EstadoTimer.PAUSA);
 		} else if (name.equals(AccionVideo.GRABAR.toString())) {
+			Multimedia.path();
 			this.timer.setEstado(EstadoTimer.CORRIENDO);
-			this.timer.tomarImagenCadaMedioSegundo();
+			this.timer.grabar();
 		} else if (name.equals(AccionVideo.DETENER_GRABACION.toString())) {
-			this.timer.setEstado(EstadoTimer.PAUSA);
-			this.timer.exportarMp4();
+			this.timer.setEstado(EstadoTimer.STOP);
+			try {
+				this.timer.exportarMp4();
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(null, "Error: no se pudo generar el video");
+				e1.printStackTrace();
+			}
 		} else if (name.equals(AccionVideo.TRACE_ON.toString())){
 			this.graficoMapa.trace(Boolean.TRUE);
 		} else if (name.equals(AccionVideo.TRACE_OFF.toString())){
@@ -146,4 +155,3 @@ public class Form extends JFrame implements ActionListener {
 	}
 
 }
-

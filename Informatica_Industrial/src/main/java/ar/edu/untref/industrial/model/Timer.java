@@ -1,12 +1,12 @@
 package main.java.ar.edu.untref.industrial.model;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.TimerTask;
 
 import main.java.ar.edu.untref.industrial.grafico.EstadoTimer;
 import main.java.ar.edu.untref.industrial.grafico.GraficoMapa;
-import main.java.ar.edu.untref.industrial.holder.VideoImageHolder;
-import main.java.ar.edu.untref.industrial.mp4.SequenceEncoder;
+import main.java.ar.edu.untref.industrial.multimedia.Multimedia;
 
 public class Timer extends TimerTask {
 
@@ -39,13 +39,12 @@ public class Timer extends TimerTask {
 		this.estado = estado;
 	}
 
-	public void tomarImagenCadaMedioSegundo() {
+	public void grabar() {
 		this.grabando = Boolean.TRUE;
-		VideoImageHolder.getImages().clear();
 	}
 
-	public void exportarMp4() {
+	public void exportarMp4() throws IOException {
 		this.grabando = Boolean.FALSE;
-		SequenceEncoder.exportToMp4();
+        Multimedia.exportarMp4();
 	}
 }

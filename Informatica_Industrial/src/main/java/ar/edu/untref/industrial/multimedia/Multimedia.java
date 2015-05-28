@@ -21,7 +21,7 @@ public class Multimedia {
 private static int numeroCaptura=1;
         
  private static BufferedImage image;   
- private static String path;
+ private static String path=null;
     
 	public static void captureScreen(Point p , Dimension screenSize)  {
         try {
@@ -47,27 +47,47 @@ private static int numeroCaptura=1;
     }
 
     public static void exportarMp4() throws IOException {
-		  SequenceEncoder encoder = new SequenceEncoder(new File(path + "/video.mp4"));
-		  JOptionPane.showMessageDialog(null, "Generando  archivo de video");
-		  File fichero;
-		  for (int i = 1; i < numeroCaptura; i++) {
-			  BufferedImage bi = ImageIO.read(new File(String.format(path + "/captura" + i + ".jpg")));
-		      encoder.encodeImage(bi); 
-		      fichero = new File(path + "/captura" + i + ".jpg");
-		      fichero.delete();
-		  } 
-		  numeroCaptura=1;
-		  encoder.finish(); 
-		  JOptionPane.showMessageDialog(null, "Archivo de video generado");
+		  if(path!=null){
+			  SequenceEncoder encoder = new SequenceEncoder(new File(path + "/video.mp4"));
+		      JOptionPane.showMessageDialog(null, "Generando  archivo de video");
+		      File fichero;
+		      for (int i = 1; i < numeroCaptura; i++) {
+			     BufferedImage bi = ImageIO.read(new File(String.format(path + "/captura" + i + ".jpg")));
+		         encoder.encodeImage(bi); 
+		         fichero = new File(path + "/captura" + i + ".jpg");
+		         fichero.delete();
+		      } 
+		      numeroCaptura=1;
+		      encoder.finish(); 
+		      JOptionPane.showMessageDialog(null, "Archivo de video generado");
+		  }
 	}
     
-	public static void path(){
-		JFileChooser chooser = new JFileChooser(); 
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
-		int returnVal = chooser.showOpenDialog(chooser); 
+	public static Boolean path(){
+		Boolean escogio=Boolean.FALSE;
+		JFileChooser eleccion = new JFileChooser(); 
+		eleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+		int returnVal = eleccion.showOpenDialog(eleccion); 
 		if(returnVal == JFileChooser.APPROVE_OPTION) {  
-			path = chooser.getSelectedFile().getAbsolutePath(); 
+			path = eleccion.getSelectedFile().getAbsolutePath(); 
 		}
+		if(path!=null){
+			escogio=Boolean.TRUE;
+		}
+			
+		return escogio;
     }
+	
+	public static File getArchivo(){
+		File archivo = null;
+		JFileChooser file=new JFileChooser(); 
+		file.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+		int returnVal = file.showOpenDialog(file); 
+		if(returnVal == JFileChooser.APPROVE_OPTION) {  
+			 archivo=file.getSelectedFile(); 
+		}
+		return archivo;
+		
+	}
     
 }

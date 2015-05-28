@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,11 +35,13 @@ public class Form extends JFrame implements ActionListener {
 	private GraficoMapa graficoMapa;
 	private Timer timer;
 	private JPanel contentPane;
+	private JMenu archivo;
+	private JMenuItem abrir;
+    private JMenuBar menu;
 	
 	public Form() {
 		graficoMapa = new GraficoMapa(new Point(250, 250));
-		timer = new Timer(this.graficoMapa, Parser.parsear(new File("src/test/resources/gps1.txt")));
-		
+		timer = new Timer(this.graficoMapa);
 		initUI();
 	}
 
@@ -46,7 +51,7 @@ public class Form extends JFrame implements ActionListener {
 		
 		JPanel subPanel = cargarPaneles();
 		cargarBotones(subPanel);
-
+		cargarMenu();
 		timer.run();
 	}
 
@@ -136,22 +141,40 @@ public class Form extends JFrame implements ActionListener {
 		} else if (name.equals(AccionVideo.PAUSA.toString())) {
 			this.timer.setEstado(EstadoTimer.PAUSA);
 		} else if (name.equals(AccionVideo.GRABAR.toString())) {
-			Multimedia.path();
-			this.timer.setEstado(EstadoTimer.CORRIENDO);
-			this.timer.grabar();
+			this.timer.setEstado(EstadoTimer.PAUSA);
+			if(Multimedia.path()){
+				this.timer.setEstado(EstadoTimer.CORRIENDO);
+				this.timer.grabar();
+			}else{
+				JOptionPane.showMessageDialog(null, "Error: Debe seleccionar una carpeta para guardar el video");
+			}
 		} else if (name.equals(AccionVideo.DETENER_GRABACION.toString())) {
 			this.timer.setEstado(EstadoTimer.STOP);
 			try {
 				this.timer.exportarMp4();
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog(null, "Error: no se pudo generar el video");
-				e1.printStackTrace();
 			}
 		} else if (name.equals(AccionVideo.TRACE_ON.toString())){
 			this.graficoMapa.trace(Boolean.TRUE);
 		} else if (name.equals(AccionVideo.TRACE_OFF.toString())){
 			this.graficoMapa.trace(Boolean.FALSE);
-		}
+		}else if(name.equals(abrir.getActionCommand())){
+			    File archivo=Multimedia.getArchivo();
+			      if(archivo!=null){
+			         timer.setRowsFile(Parser.parsear(archivo));
+			      }
+			   }
 	}
-
+	
+    private void cargarMenu(){
+		menu = new JMenuBar();
+		setJMenuBar(menu);
+		archivo=new JMenu("Archivo");
+	    menu.add(archivo);
+	    abrir=new JMenuItem("Abrir");
+	    abrir.addActionListener(this);
+	    archivo.add(abrir);
+    }
+ 
 }

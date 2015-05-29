@@ -6,13 +6,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import main.java.ar.edu.untref.industrial.model.*;
@@ -39,7 +41,7 @@ public class GraficoMapa extends JComponent {
 		this.center = center;
 	}
 
-	public void doDrawing() {
+	public void doDrawing() throws IOException {
 		Rectangle2D.Double rectangle = new Rectangle2D.Double(0, 0, this.getWidth(), this.getHeight());
 		
 		graphics2D.setColor(Color.white);
@@ -58,11 +60,11 @@ public class GraficoMapa extends JComponent {
 		graphics2D.drawString("OESTE", 20,250);
 		graphics2D.drawString("ESTE", 440,250);
 		graphics2D.drawString("SUR", 240,460);
-			this.drawingSatellites();
+		this.drawingSatellites();
 		
 	}
 
-	private void drawingSatellites() {
+	private void drawingSatellites() throws IOException {
 		RowFileGps fila = new RowFileGps();		
 		if (satelites != null) {
 			dibujar(satelites);
@@ -90,7 +92,12 @@ public class GraficoMapa extends JComponent {
 		
 		super.paintComponent(g);
 		
-		doDrawing();
+		try {
+			doDrawing();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Satelite> getSatelites() {
@@ -106,32 +113,31 @@ public class GraficoMapa extends JComponent {
 		this.grabando = grabando;
 	}
 	
-	private Image getIcon(Satelite satelite) {
+	private Image getIcon(Satelite satelite) throws IOException {
 
 		Image imgSatelite;
-       String path=new String("src/test/resources");
 		
         switch (satelite.getPrn()) {
 		case 11:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoGreen.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoGreen.gif")).getImage();
 			break;
 		case 13:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoGray.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoGray.gif")).getImage();
 			break;
 		case 20:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoBlue.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoBlue.gif")).getImage();
 			break;
 		case 23:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoOrange.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoOrange.gif")).getImage();
 			break;
 		case 24:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoRed.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoRed.gif")).getImage();
 			break;
 		case 32:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoMagenta.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoMagenta.gif")).getImage();
 			break;
 		default:
-			imgSatelite = Toolkit.getDefaultToolkit().getImage(path + "/iconoBlack.gif");
+			imgSatelite = new ImageIcon(GraficoMapa.class.getResource("iconoBlack.gif")).getImage();
 			break;
 		}
 
@@ -145,7 +151,7 @@ public class GraficoMapa extends JComponent {
 		}
 	}
 	
-	private void dibujar(List<Satelite>satelites){
+	private void dibujar(List<Satelite>satelites) throws IOException{
 		for (Satelite unSatelite: satelites) {
 			Point2D.Double pointSat = calcularPunto(unSatelite);
 			graphics2D.setColor(getColor(unSatelite));

@@ -46,9 +46,11 @@ public class Timer extends TimerTask {
 		this.grabando = Boolean.FALSE;
         Multimedia.exportarMp4();
 	}
-	public void setRowsFile(List<RowFileGps> rowsFile){
+	public void setRowsFile(List<RowFileGps> rowsFile) throws IOException{
 		this.rowsFile = rowsFile;
 		rowRecorrida=0;
 		this.estado= EstadoTimer.STOP;
+		this.mapa.update(null, this.grabando);
+		this.mapa.repaint();
 	}
 }

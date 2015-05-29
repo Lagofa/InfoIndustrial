@@ -162,7 +162,11 @@ public class Form extends JFrame implements ActionListener {
 		}else if(name.equals(abrir.getActionCommand())){
 			    File archivo=Multimedia.getArchivo();
 			      if(archivo!=null){
-			         timer.setRowsFile(Parser.parsear(archivo));
+			         try {
+						timer.setRowsFile(Parser.parsear(archivo));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 			      }
 			   }
 	}
